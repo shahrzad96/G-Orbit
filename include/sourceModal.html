@@ -1,0 +1,34 @@
+<div id="myModal" class="modal">
+
+	<!-- Modal content -->
+	<div class="modal-content">
+	<span class="close">&times;</span>
+	<p><b>Log in to G-Orbit</b><br></p>
+	
+	<div class="credentials">
+	<br><br><br>
+
+		<form id= "login_Form" method="post" action="index.php">
+		
+			<label> Username:	    </label>
+				<input id="uN" type="text" name="userName" placeholder="Username"><br>
+
+			<label> Password:   	</label> 
+				<input id = "pW" type="password" name="passWord" placeholder="Password"><br>
+				
+				<div class="showPass">
+					<p id = "showP" > Show Password<br><br> </p>
+				</div>
+				
+				<button onclick="getCredentials()" >Log In!</button>
+				
+		</form>
+		
+		<button onclick="createAccountPopUp()" class="button1" type="button" value="createLogin"  id="create_account"  class = "createAcc" > Create Account </button> 	
+		
+	
+	<br><br><br>
+	</div>
+	</div>
+
+</div>

@@ -1,0 +1,279 @@
+<!doctype html>
+
+<?php
+	ob_start();
+	include('index.php');
+	ob_end_clean();
+	
+	if(!isset($_SESSION)) 
+    { 
+        session_start(); 
+    } 
+?>
+
+<html>
+    <head>
+        <title>Facebook Style Popup Design</title>
+        <style>
+           
+		   @media only screen and (max-width : 540px) 
+            {
+                .chat-sidebarChat
+                {
+                    display: none !important;
+                }
+                
+                .chat-popup
+                {
+                    display: none !important;
+                }
+            }
+            
+			.bottomm{
+			
+			color:red;
+			}
+
+            
+            .chat-sidebarChat
+            {
+                width: 200px;
+                position: fixed;
+                height: 100%;
+                right: 0px;
+                top: 0px;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                border: 1px solid red;
+            }
+            
+            .sidebarChat-name 
+            {
+                padding-left: 10px;
+                padding-right: 10px;
+                margin-bottom: 4px;
+                font-size: 12px;
+            }
+            
+            .sidebarChat-name span
+            {
+                padding-left: 5px;
+            }
+            
+            .sidebarChat-name a
+            {
+                display: block;
+                text-decoration: none;
+                color: inherit;
+            }
+            
+            .sidebarChat-name:hover
+            {
+                background-color:red;
+            }
+            
+            .sidebarChat-name img
+            {
+                width: 32px;
+                height: 32px;
+                vertical-align:middle;
+            }
+            
+            .popup-box
+            {
+                display: none;
+                position: fixed;
+                bottom: 0px;
+                right: 220px;
+                height: 285px;
+                background-color: rgb(237, 239, 244);
+                width: 300px;
+                border: 1px solid rgba(29, 49, 91, .3);
+            }
+            
+            .popup-box .popup-head
+            {
+                background-color: #6d84b4;
+                padding: 5px;
+                color: white;
+                font-weight: bold;
+                font-size: 14px;
+                clear: both;
+            }
+            
+            .popup-box .popup-head .popup-head-left
+            {
+                float: left;
+            }
+            
+            .popup-box .popup-head .popup-head-right
+            {
+                float: right;
+                opacity: 0.5;
+            }
+            
+            .popup-box .popup-head .popup-head-right a
+            {
+                text-decoration: none;
+                color: inherit;
+            }
+            
+            .popup-box .popup-messages
+            {
+                height: 100%;
+                overflow-y: scroll;
+            }
+            
+
+
+        </style>
+        
+        <script>
+		
+			var total_popups = 0;
+            var popups = [];
+		
+            //this function can remove a array element.
+            Array.remove = function(array, from, to) {
+                var rest = array.slice((to || from) + 1 || array.length);
+                array.length = from < 0 ? array.length + from : from;
+                return array.push.apply(array, rest);
+            };
+        
+
+            //this is used to close a popup
+            function close_popup(id)
+            {
+                for(var i = 0; i < popups.length; i++)
+                {
+                    if(id == popups[i])
+                    {
+						alert("match");
+                        Array.remove(popups, i);
+                        
+                        document.getElementById(id).style.display = "none";
+                        
+                        calculate_popups();
+                        
+                        return;
+                    }
+                }   
+            }
+        
+            //display popups
+            function display_popups()
+            {
+                var right = 220;
+                
+                var i = 0;
+                for(i; i < total_popups; i++)
+                {
+                    if(popups[i] != undefined)
+                    {
+                        var element = document.getElementById(popups[i]);
+                        element.style.right = right + "px";
+                        right = right + 320;
+                        element.style.display = "block";
+                    }
+                }
+                
+                for(var j = i; j < popups.length; j++)
+                {
+                    var element = document.getElementById(popups[j]);
+                    element.style.display = "none";
+                }
+            }
+            
+            //creates markup for a new popup. Adds the id to popups array.
+            function register_popup(id, name)
+            {
+                
+                for(var i = 0; i < popups.length; i++)
+                {   
+                    //already registered. Bring it to front.
+                    if(id == popups[i])
+                    {
+                        Array.remove(popups, i);
+                    
+                        popups.unshift(id);
+                        
+                        calculate_popups();
+                        
+                        
+                        return;
+                    }
+                }               
+                
+                var element = '<div class="popup-box chat-popup" id="'+ id +'">';
+                element = element + '<div class="popup-head">';
+                element = element + '<div class="popup-head-left">'+ name +'</div>';
+                element = element + '<div class="popup-head-right"><a href="javascript:close_popup(\''+ id +'\');">&#10005;</a></div>';
+                element = element + '<div style="clear: both"></div></div><div class="popup-messages"></div>';
+				element = element + '<div class="popup-base" > ' + name + ' </div></div>';
+				
+
+                document.getElementById("bottom").innerHTML = document.getElementById("bottom").innerHTML + element;  
+				
+				console.log(document.getElementById("bottom").innerHTML);
+                
+				popups.unshift(id);
+                        
+                calculate_popups();
+                
+            }
+            
+            //calculate the total number of popups suitable and then populate the toatal_popups variable.
+            function calculate_popups()
+            {
+                var width = window.innerWidth;
+                if(width < 540)
+                {
+                    total_popups = 0;
+                }
+                else
+                {
+                    width = width - 200;
+                    //320 is width of a single popup box
+                    total_popups = parseInt(width/320);
+                }
+                
+                display_popups();
+                
+            }
+            
+            window.addEventListener("resize", calculate_popups);
+            window.addEventListener("load", calculate_popups);
+            
+        </script>
+		
+    </head>
+    <body  bgcolor="#000000">
+	
+         <div class="chat-sidebarChat">
+			Friend List
+            <div class="sidebarChat-name">
+                <!-- Pass username and display name to register popup -->
+                <a href="javascript:register_popup('narayan-prusty', 'Narayan Prusty');">
+                    <img width="30" height="30" src="Game_Pictures\game1.jpg" />
+                    <span>Narayan Prusty</span>
+                </a>
+            </div>
+
+
+            <div class="sidebarChat-name">
+                <a href="javascript:register_popup('skerd-xhafa', 'Skerd Xhafa');">
+                    <img width="30" height="30" src="Game_Pictures\game2.jpg" />
+                    <span>Skerd Xhafa</span>
+                </a>
+            </div>
+			
+        </div>
+
+		<div class="bottomm"	id="bottom" >	
+		
+				asdfsadf
+		</div>
+		
+        
+    </body>
+</html>

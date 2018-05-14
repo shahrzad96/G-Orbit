@@ -1,0 +1,28 @@
+<div class="login_right_top" id="loginRightTop">
+	<button class="button1" type="button" onclick="alertt()" id="support"> Support </button> 
+	<button class="button1" type="button" onclick="goAccount()" id="account"> Account </button> 
+	
+
+		<?php if (isset($_SESSION['loggedIn'])) { ?>
+			<button class="button1" type="button" value="logout" id="login_btn" onclick = "logoutdude()"> Sign out </button> 
+		<?php } else { ?>
+			<button class="button1" type="button" value="login" id="login_btn" onclick = "logoutdude()"> Sign in / Join </button>
+			 
+		<?php } ?>
+		
+	
+	<div id="put_Right">
+		<button type="button" onclick="alertttSearch()">Ok</button>
+	</div>
+	<div id="put_Right">
+		<input type="text" placeholder="Search.." name="search" id="search">
+	</div>
+	
+	
+	<form id ="searchForm" method="post" action ="search.php">
+			<input id="searchBt" type="hidden" name="searchBt" value="ADSASD" >	 
+	</form>
+	
+	
+	
+</div>
